@@ -1,0 +1,69 @@
+{
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.tabSize": 2,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    ".npmrc": true,
+    ".prettierignore": true,
+    "pnpm-lock.yaml": true,
+    "prettier.config.mjs": true,
+    "modules/": true,
+    "node_modules/": true,
+    ".nuxt/": true,
+    "supabase/": true
+  },
+  "hidefiles.configurationType": "local",
+  "hidefiles.globalConfig": {
+    "profiles": [
+      {
+        "name": "Default",
+        "detail": "",
+        "description": "Test",
+        "hidden": [".vscode/"]
+      },
+      {
+        "name": "Strict",
+        "detail": "Hide everything not immediately required",
+        "hidden": ["$Default"]
+      },
+      {
+        "hidden": [
+          ".gitignore",
+          ".npmrc",
+          ".prettierignore",
+          "components.json",
+          "pnpm-lock.yaml",
+          "prettier.config.mjs",
+          "modules/",
+          "node_modules/",
+          ".nuxt/",
+          ".vscode/",
+          "supabase/",
+          "components.json",
+          ".vscode/",
+          ".vscode/",
+          ".gitignore"
+        ],
+        "name": "Nuxt",
+        "description": "",
+        "detail": "",
+        "peek": [".gitignore", "components.json", ".vscode/"]
+      }
+    ]
+  },
+  "hidefiles.selectedProfile": "Nuxt",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ]
+}
