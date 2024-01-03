@@ -17,6 +17,9 @@ dependencies:
   '@vee-validate/zod':
     specifier: ^4.12.4
     version: 4.12.4(vue@3.4.1)
+  '@vercel/speed-insights':
+    specifier: ^1.0.2
+    version: 1.0.2
   '@vueuse/components':
     specifier: ^10.7.1
     version: 10.7.1(vue@3.4.1)
@@ -1873,6 +1876,11 @@ packages:
       - encoding
       - supports-color
     dev: true
+
+  /@vercel/speed-insights@1.0.2:
+    resolution: {integrity: sha512-y5HWeB6RmlyVYxJAMrjiDEz8qAIy2cit0fhBq+MD78WaUwQvuBnQlX4+5MuwVTWi46bV3klaRMq83u9zUy1KOg==}
+    requiresBuild: true
+    dev: false
 
   /@vitejs/plugin-vue-jsx@3.1.0(vite@5.0.10)(vue@3.4.1):
     resolution: {integrity: sha512-w9M6F3LSEU5kszVb9An2/MmXNxocAnUb3WhRr8bHlimhDrXNt6n6D2nJQR3UXpGlZHh/EsgouOHCsM8V3Ln+WA==}
