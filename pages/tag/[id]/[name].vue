@@ -11,7 +11,12 @@ useHead({
 dbAutoLockImage(params.id, 50 * 1000)
 const { word } = await dbAutoSaveLabel(params.id)
 
+const isLoading = ref(false)
+
 function newImage() {
+  if (isLoading.value) return
+
+  isLoading.value = true
   navigateTo('/tag')
 }
 
@@ -54,12 +59,14 @@ const imageUrl = getImageUrl(params.name)
       <div
         class="absolute inset-y-0 -left-[100px] mb-20 flex -translate-x-full items-center"
       >
-        <Button variant="default" @click="newImage()">
+        <Button variant="default" @click="newImage()" :disabled="isLoading">
           صورة جديدة
           <Kbd class="ms-2">enter</Kbd>
           <Icon name="tabler:chevron-left" />
         </Button>
       </div>
+
+      <Loading :show="isLoading" />
     </Card>
   </div>
 </template>

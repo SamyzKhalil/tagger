@@ -28,7 +28,6 @@ const table = useVueTable({
 
 <template>
   <Card
-    v-auto-animate="{ duration: 50 }"
     v-bind="$attrs"
     class="relative overflow-auto"
     :class="{ 'overflow-hidden': props.loading }"
@@ -74,11 +73,6 @@ const table = useVueTable({
     </Table>
     <!-- </ScrollArea> -->
 
-    <div
-      v-if="props.loading"
-      class="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-    >
-      تحميل...
-    </div>
+    <Loading :show="props.loading" />
   </Card>
 </template>
