@@ -1,4 +1,3 @@
-
 export type Json =
   | string
   | number
@@ -35,188 +34,148 @@ export interface Database {
   }
   public: {
     Tables: {
-      contributors: {
+      locked_images: {
         Row: {
           created_at: string
           id: string
-          username: string
+          locked_at: string
         }
         Insert: {
           created_at?: string
           id: string
-          username: string
+          locked_at?: string
         }
         Update: {
           created_at?: string
           id?: string
-          username?: string
+          locked_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "contributors_id_fkey"
+            foreignKeyName: "locked_images_id_fkey"
             columns: ["id"]
             isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      labels: {
-        Row: {
-          contributor: string
-          created_at: string
-          id: number
-          image_id: string
-          label: string
-        }
-        Insert: {
-          contributor?: string
-          created_at?: string
-          id?: number
-          image_id: string
-          label: string
-        }
-        Update: {
-          contributor?: string
-          created_at?: string
-          id?: number
-          image_id?: string
-          label?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "labels_contributor_fkey"
-            columns: ["contributor"]
-            isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "images"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "labels_image_id_fkey"
-            columns: ["image_id"]
+            foreignKeyName: "locked_images_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "images_random"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "locked_images_id_fkey"
+            columns: ["id"]
             isOneToOne: true
             referencedRelation: "objects"
             referencedColumns: ["id"]
           }
         ]
       }
-      viewing: {
+      tags: {
         Row: {
+          contributor_id: string
           created_at: string
           id: number
           image_id: string
-          updated_at: string
-          user_id: string
+          word: string | null
         }
         Insert: {
+          contributor_id?: string
           created_at?: string
           id?: number
           image_id: string
-          updated_at?: string
-          user_id?: string
+          word?: string | null
         }
         Update: {
+          contributor_id?: string
           created_at?: string
           id?: number
           image_id?: string
-          updated_at?: string
-          user_id?: string
+          word?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "viewing_image_id_fkey"
-            columns: ["image_id"]
-            isOneToOne: true
-            referencedRelation: "objects"
+            foreignKeyName: "tags_contributor_id_fkey"
+            columns: ["contributor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "viewing_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "tags_contributor_id_fkey"
+            columns: ["contributor_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tags_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: true
+            referencedRelation: "images"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tags_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: true
+            referencedRelation: "images_random"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tags_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: true
+            referencedRelation: "objects"
             referencedColumns: ["id"]
           }
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      images: {
+        Row: {
+          file_name: string | null
+          handle: string | null
+          id: string | null
+          is_locked: boolean | null
+          word: string | null
+        }
+        Relationships: []
+      }
+      images_random: {
+        Row: {
+          file_name: string | null
+          handle: string | null
+          id: string | null
+          is_locked: boolean | null
+          word: string | null
+        }
+        Relationships: []
+      }
+      stats: {
+        Row: {
+          contributors: number | null
+          images: number | null
+          words: number | null
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          contributions: number | null
+          handle: string | null
+          id: string | null
+          is_admin: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      delete_claim: {
-        Args: {
-          uid: string
-          claim: string
-        }
-        Returns: string
-      }
-      get_claim: {
-        Args: {
-          uid: string
-          claim: string
-        }
-        Returns: Json
-      }
-      get_claims: {
-        Args: {
-          uid: string
-        }
-        Returns: Json
-      }
-      get_contributions: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          username: string
-          contributions: number
-        }[]
-      }
-      get_images: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          name: string
-          label: string
-          contributor: string
-        }[]
-      }
-      get_my_claim: {
-        Args: {
-          claim: string
-        }
-        Returns: Json
-      }
-      get_my_claims: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
-      is_claims_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      set_claim: {
-        Args: {
-          uid: string
-          claim: string
-          value: Json
-        }
-        Returns: string
-      }
-      view_image: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          bucket_id: string | null
-          created_at: string | null
-          id: string
-          last_accessed_at: string | null
-          metadata: Json | null
-          name: string | null
-          owner: string | null
-          owner_id: string | null
-          path_tokens: string[] | null
-          updated_at: string | null
-          version: string | null
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never

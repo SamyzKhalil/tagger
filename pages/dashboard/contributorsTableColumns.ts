@@ -1,14 +1,14 @@
 import type { ColumnDef } from '@tanstack/vue-table'
 
 export interface Contributions {
-  username: string
-  contributions: number
+  handle: string | null
+  contributions: number | null
 }
 
 export const contributorsTableColumns: ColumnDef<Contributions>[] = [
   {
-    accessorKey: 'username',
-    header: 'اسم المستخدم',
+    accessorKey: 'handle',
+    header: 'المُعرّف',
   },
   {
     accessorKey: 'contributions',

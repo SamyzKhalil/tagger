@@ -8,13 +8,18 @@ useHead({
   title: params.name,
 })
 
-const { imageUrl, newImage } = useImageDb(params.id, params.name)
+dbAutoLockImage(params.id, 50 * 1000)
+const { word } = await dbAutoSaveLabel(params.id)
+
+function newImage() {
+  navigateTo('/label')
+}
 
 onKeyPressed('Enter', () => {
   newImage()
 })
 
-const { label } = await useLabelDb(params.id)
+const imageUrl = getImageUrl(params.name)
 </script>
 
 <template>
@@ -30,18 +35,17 @@ const { label } = await useLabelDb(params.id)
       </CardContent>
 
       <CardFooter>
-        <Input
-          class="h-16 text-2xl"
-          placeholder="الكلمة"
-          v-lock-focus
-          v-model="label"
-        />
+        <Input class="h-16 text-2xl" placeholder="الكلمة" v-lock-focus v-model="word" />
       </CardFooter>
 
       <div
         class="absolute inset-y-0 -right-[100px] mb-20 flex translate-x-full items-center"
       >
-        <Button variant="ghost" @click="$router.back()">
+        <Button
+          variant="ghost"
+          @click="$router.back()"
+          :disabled="!$router.options.history.state.back"
+        >
           <Icon name="tabler:chevron-right" />
           السابق
         </Button>

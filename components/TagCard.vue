@@ -1,5 +1,10 @@
 <script setup lang="ts">
-defineProps<{ icon: string; title: string; value: string; of?: string }>()
+defineProps<{
+  icon: string
+  title: string
+  value?: string | number | null
+  of?: string | number | null
+}>()
 </script>
 
 <template>
@@ -13,7 +18,7 @@ defineProps<{ icon: string; title: string; value: string; of?: string }>()
         <CardTitle class="text-base font-normal">{{ title }}</CardTitle>
       </CardHeader>
       <CardContent class="flex items-baseline">
-        <div class="text-3xl font-bold">{{ value }}</div>
+        <div class="text-3xl font-bold">{{ value || '-' }}</div>
         <div v-if="of" class="text-lg text-muted-foreground">&nbsp;/ {{ of }}</div>
       </CardContent>
     </div>

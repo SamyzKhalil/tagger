@@ -18,8 +18,7 @@
     "prettier.config.mjs": true,
     "modules/": true,
     "node_modules/": true,
-    ".nuxt/": true,
-    "supabase/": true
+    ".nuxt/": true
   },
   "hidefiles.configurationType": "local",
   "hidefiles.globalConfig": {
@@ -56,7 +55,7 @@
         "name": "Nuxt",
         "description": "",
         "detail": "",
-        "peek": [".gitignore", "components.json", ".vscode/"]
+        "peek": [".gitignore", "components.json", ".vscode/", "supabase/"]
       }
     ]
   },

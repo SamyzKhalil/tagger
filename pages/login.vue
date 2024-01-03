@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
-import { loginSchema } from '@/schema/auth'
+import { formSchema } from '@/schema/auth'
+import { toTypedSchema } from '@vee-validate/valibot'
 
 definePageMeta({
   layout: 'auth',
@@ -9,60 +10,48 @@ definePageMeta({
 useHead({ title: 'تسجيل الدخول' })
 
 const form = useForm({
-  validationSchema: loginSchema,
+  validationSchema: toTypedSchema(formSchema),
 })
 
-const errorMessage = ref('')
-const supabase = useSupabaseClient()
+const alert = ref<{ type: 'default' | 'destructive'; message: string } | null>()
 
 const submitHandler = form.handleSubmit(async values => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: values.email,
-    password: values.password,
-  })
+  alert.value = null
 
-  if (error?.status === 400) {
-    errorMessage.value = 'بيانات تسجيل الدخول غير صحيحة'
-  }
-})
+  const { success, message } = await dbSignIn(values)
 
-const user = useSupabaseUser()
-
-watch(user, () => {
-  if (user.value) {
+  if (success) {
     return navigateTo('/')
   }
+
+  alert.value = { type: 'destructive', message }
 })
 </script>
 
 <template>
   <Card>
     <CardHeader>
-      <Alert v-if="errorMessage" variant="destructive">
+      <Alert v-if="alert" :variant="alert.type">
         <Icon name="tabler:alert-circle" />
-        <AlertTitle>خطأ</AlertTitle>
-        <AlertDescription>{{ errorMessage }}</AlertDescription>
+        <AlertTitle>{{ alert.type === 'default' ? 'نجاح' : 'خطأ' }}</AlertTitle>
+        <AlertDescription>{{ alert.message }}</AlertDescription>
       </Alert>
     </CardHeader>
 
     <CardContent class="space-y-2">
       <form id="login" class="space-y-8" @submit="submitHandler">
-        <FormField v-slot="{ componentField }" name="email">
-          <FormItem>
-            <FormLabel>البريد الإلكترونى</FormLabel>
+        <FormField v-slot="{ componentField }" name="handle">
+          <FormItem v-auto-animate>
+            <FormLabel>المُعرّف</FormLabel>
             <FormControl>
-              <Input
-                type="email"
-                placeholder="ادخل البريد الإلكترونى"
-                v-bind="componentField"
-              />
+              <Input type="text" placeholder="ادخل المُعرّف" v-bind="componentField" />
             </FormControl>
             <FormMessage />
           </FormItem>
         </FormField>
 
         <FormField v-slot="{ componentField }" name="password">
-          <FormItem>
+          <FormItem v-auto-animate>
             <FormLabel>كلمة المرور</FormLabel>
             <FormControl>
               <Input

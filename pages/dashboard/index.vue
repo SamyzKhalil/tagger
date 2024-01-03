@@ -6,23 +6,44 @@ definePageMeta({
   middleware: 'admin',
 })
 
-const { contributors } = await useContributorsDb()
-const { images } = await useImagesDb()
+// const { contributors } = await useContributorsDb()
+// const { images } = await useImagesDb()
+
+const stats = await dbGetStats()
+
+const {
+  isLoading,
+  images,
+  next,
+  prev,
+  isFirstPage,
+  isLastPage,
+  pageCount,
+  currentPage,
+  currentPageSize,
+} = await useImages(1, 100, stats?.images!)
+
+const users = await dbGetUsers()
 </script>
 
 <template>
   <div class="flex h-screen w-screen gap-4 p-4">
     <div class="flex w-2/5 min-w-[300px] flex-col space-y-4">
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
-        <TagCard icon="tabler:tag" title="الكلمات" value="3729" of="15430" />
-        <TagCard icon="tabler:users" title="المساهمون" value="91" />
+        <TagCard
+          icon="tabler:tag"
+          title="الكلمات"
+          :value="stats?.words"
+          :of="stats?.images"
+        />
+        <TagCard icon="tabler:users" title="المساهمون" :value="stats?.contributors" />
       </div>
 
-      <DataTable :columns="contributorsTableColumns" :data="contributors" />
+      <DataTable :columns="contributorsTableColumns" :data="users" />
     </div>
 
     <div class="flex w-full flex-col gap-4">
-      <div class="flex justify-between">
+      <div class="flex justify-between" v-if="false">
         <div class="flex w-5/12 gap-2">
           <Input placeholder="بحث..." />
           <Toggle variant="outline" color="destructive">
@@ -40,9 +61,22 @@ const { images } = await useImagesDb()
       <DataTable
         class="h-full"
         :columns="imagesTableColumns"
-        :data="[...images, ...images, ...images]"
-        pagination
+        :data="images"
+        :loading="isLoading"
       />
+
+      <div class="flex justify-between">
+        <span class="ps-4">
+          صفحة {{ currentPage }} من {{ pageCount }} - {{ currentPageSize }} صورة
+        </span>
+
+        <div class="flex space-x-2 rtl:space-x-reverse">
+          <Button variant="outline" :disabled="isFirstPage" @click="prev">
+            السابق
+          </Button>
+          <Button variant="outline" :disabled="isLastPage" @click="next">التالى</Button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

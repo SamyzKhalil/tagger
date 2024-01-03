@@ -11,15 +11,12 @@ function signOut() {
 
 <template>
   <div
-    v-if="user"
     class="top-0 mx-auto flex h-24 w-full max-w-screen-lg items-center justify-between gap-8"
   >
     <div class="flex items-center gap-4">
-      <span>
-        {{ user?.user_metadata.username }}
-      </span>
+      <span>{{ user?.user_metadata.handle }}</span>
 
-      <Button v-if="user.app_metadata.role_admin" variant="outline" as-child>
+      <Button v-if="user?.app_metadata.is_admin" variant="outline" as-child>
         <NuxtLink to="/dashboard">لوحة التحكم</NuxtLink>
       </Button>
     </div>
