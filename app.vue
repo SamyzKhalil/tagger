@@ -3,7 +3,7 @@ import { ConfigProvider } from 'radix-vue'
 
 useHead({
   titleTemplate: titleChunk => {
-    return titleChunk ? `${titleChunk} | وسّام` : 'وسّام'
+    return titleChunk ? `وسّام | ${titleChunk}` : 'وسّام'
   },
   htmlAttrs: {
     dir: 'rtl',

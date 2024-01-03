@@ -6,6 +6,10 @@ definePageMeta({
   middleware: 'admin',
 })
 
+useHead({
+  title: 'لوحة التحكم',
+})
+
 // const { contributors } = await useContributorsDb()
 // const { images } = await useImagesDb()
 

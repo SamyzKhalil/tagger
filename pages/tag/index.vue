@@ -2,6 +2,10 @@
 definePageMeta({
   middleware: 'tag',
 })
+
+useHead({
+  title: 'نفدت الصور',
+})
 </script>
 
 <template>
