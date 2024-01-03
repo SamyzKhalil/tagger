@@ -15,7 +15,7 @@ export const imagesTableColumns: ColumnDef<Image>[] = [
     cell({ row }) {
       const url = row.original.file_name ? getImageUrl(row.original.file_name) : ''
 
-      return <img width={100} height={50} src={url} />
+      return <img width={100} height={50} src={url} key={row.original.file_name!} />
     },
   },
   {

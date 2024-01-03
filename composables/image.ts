@@ -95,8 +95,6 @@ export async function useImages(page: number, perPage: number, total: number) {
       currentPageSize: perPage,
     },
   ) {
-    isLoading.value = true
-
     return supabase
       .from('images')
       .select()
@@ -112,30 +110,29 @@ export async function useImages(page: number, perPage: number, total: number) {
       })
   }
 
-  const data = ref(await getImages())
-  const cache = {
-    [page]: data.value,
-  }
+  const debouncedGetImage = useDebounceFn(getImages, 500)
+
+  const images = ref(await debouncedGetImage())
 
   const pagination = useOffsetPagination({
     async onPageChange(state) {
-      if (cache[state.currentPage]) {
-        data.value = cache[state.currentPage]
-      }
+      isLoading.value = true
+      const data = await debouncedGetImage(state)
 
-      data.value = await getImages(state)
-      cache[state.currentPage] = data.value
+      if (data) {
+        images.value = data
+      }
     },
     total,
     page,
     pageSize: perPage,
   })
 
-  const currentPageSize = computed(() => data.value?.length || 0)
+  const currentPageSize = computed(() => images.value?.length || 0)
 
   return {
     isLoading,
-    images: data,
+    images,
     ...pagination,
     currentPageSize,
   }
