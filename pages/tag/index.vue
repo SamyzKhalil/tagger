@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: 'label',
+  middleware: 'tag',
 })
 </script>
 

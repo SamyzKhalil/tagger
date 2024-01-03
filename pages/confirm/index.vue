@@ -4,7 +4,7 @@ watch(
   user,
   () => {
     if (user.value) {
-      return navigateTo('/label')
+      return navigateTo('/tag')
     }
   },
   { immediate: true },

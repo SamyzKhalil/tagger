@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onKeyPressed } from '@vueuse/core'
 
-const route = useRoute('label-id-name')
+const route = useRoute('tag-id-name')
 const params = route.params
 
 useHead({
@@ -12,7 +12,7 @@ dbAutoLockImage(params.id, 50 * 1000)
 const { word } = await dbAutoSaveLabel(params.id)
 
 function newImage() {
-  navigateTo('/label')
+  navigateTo('/tag')
 }
 
 onKeyPressed('Enter', () => {
