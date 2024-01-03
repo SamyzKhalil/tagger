@@ -31,7 +31,7 @@ const imageUrl = getImageUrl(params.name)
 
       <CardContent class="text-center">
         <img class="aspect-square w-[30vw] object-contain" :src="imageUrl" alt="" />
-        <CardDescription class="mt-2">{{ params.name }}</CardDescription>
+        <CardDescription class="mt-2" dir="auto">{{ params.name }}</CardDescription>
       </CardContent>
 
       <CardFooter>
