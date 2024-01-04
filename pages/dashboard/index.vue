@@ -93,9 +93,19 @@ const { currentPage, pageCount, currentPageSize, isFirstPage, isLastPage, next, 
       />
 
       <div class="flex justify-between">
-        <span class="ps-4">
-          صفحة {{ currentPage }} من {{ pageCount }} - {{ currentPageSize }} صورة
-        </span>
+        <div class="flex items-center gap-2 ps-4">
+          صفحة
+          <div class="w-16">
+            <Input
+              min="1"
+              :max="pageCount"
+              type="number"
+              class="appearance-textfield"
+              v-model="currentPage"
+            />
+          </div>
+          من {{ pageCount }} - {{ currentPageSize }} صورة
+        </div>
 
         <div class="flex space-x-2 rtl:space-x-reverse">
           <Button variant="outline" :disabled="isFirstPage" @click="prev">
