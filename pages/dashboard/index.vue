@@ -10,24 +10,47 @@ useHead({
   title: 'لوحة التحكم',
 })
 
-// const { contributors } = await useContributorsDb()
-// const { images } = await useImagesDb()
+const IMAGE_PAGE_SIZE = 100
 
-const stats = await dbGetStats()
+const route = useRoute('dashboard')
+const page = (route.query.page as unknown as number) || 1
 
-const {
-  isLoading,
-  images,
-  next,
-  prev,
-  isFirstPage,
-  isLastPage,
-  pageCount,
-  currentPage,
-  currentPageSize,
-} = await useImages(1, 100, stats?.images!)
+const { data, pending } = await useAsyncData('dashboard', () => {
+  return Promise.all([dbGetStats(), dbGetUsers(), dbGetImages(page, IMAGE_PAGE_SIZE)])
+})
 
-const users = await dbGetUsers()
+const [stats, users, initialImages] = data.value ?? []
+
+const images = ref(initialImages)
+
+const isLoading = ref(false)
+let ac: AbortController
+
+const { currentPage, pageCount, currentPageSize, isFirstPage, isLastPage, next, prev } =
+  useOffsetPagination({
+    page,
+    pageSize: IMAGE_PAGE_SIZE,
+    total: stats?.images || 0,
+    onPageChange: async state => {
+      if (ac) ac.abort()
+      ac = new AbortController()
+
+      isLoading.value = true
+      const data = await dbGetImages(
+        state.currentPage,
+        state.currentPageSize,
+        ac.signal,
+      )
+
+      if (data) {
+        isLoading.value = false
+        images.value = data
+
+        const pageQuery = state.currentPage === 1 ? '' : `?page=${state.currentPage}`
+        navigateTo('/dashboard' + pageQuery)
+      }
+    },
+  })
 </script>
 
 <template>

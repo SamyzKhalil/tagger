@@ -74,17 +74,17 @@ export function dbGetUniqueImage() {
     .then(({ data }) => data)
 }
 
-export function dbGetImagesCount() {
-  const supabase = useSupabase()
+// export function dbGetImagesCount() {
+//   const supabase = useSupabase()
 
-  return supabase
-    .from('stats')
-    .select('images')
-    .single()
-    .then(({ data }) => data?.images)
-}
+//   return supabase
+//     .from('stats')
+//     .select('images')
+//     .single()
+//     .then(({ data }) => data?.images)
+// }
 
-export async function useImages(page: number, perPage: number, total: number) {
+export async function useImages(page: number, perPage: number) {
   const supabase = useSupabase()
 
   const isLoading = ref(false)
@@ -123,9 +123,16 @@ export async function useImages(page: number, perPage: number, total: number) {
         images.value = data
       }
     },
-    total,
     page,
     pageSize: perPage,
+    async onPageCountChange(state) {
+      isLoading.value = true
+      const data = await debouncedGetImage(state)
+
+      if (data) {
+        images.value = data
+      }
+    },
   })
 
   const currentPageSize = computed(() => images.value?.length || 0)
@@ -136,6 +143,22 @@ export async function useImages(page: number, perPage: number, total: number) {
     ...pagination,
     currentPageSize,
   }
+}
+
+export function dbGetImages(
+  page: number,
+  pageSize: number,
+  abortSignal: AbortSignal = new AbortController().signal,
+) {
+  const supabase = useSupabase()
+
+  return supabase
+    .from('images')
+    .select()
+    .range((page - 1) * pageSize, page * pageSize - 1)
+    .order('word')
+    .abortSignal(abortSignal)
+    .then(({ data }) => data)
 }
 
 export function getImageUrl(file_name: string) {
