@@ -15,22 +15,24 @@ const IMAGE_PAGE_SIZE = 100
 const route = useRoute('dashboard')
 const page = (route.query.page as unknown as number) || 1
 
-const { data } = await useAsyncData('dashboard', () => {
+const { data, refresh } = await useAsyncData('dashboard', () => {
   return Promise.all([dbGetStats(), dbGetUsers(), dbGetImages(page, IMAGE_PAGE_SIZE)])
 })
 
-const [stats, users, initialImages] = data.value ?? []
-
-const images = ref(initialImages)
+const stats = computed(() => data.value?.[0])
+const users = computed(() => data.value?.[1])
+const images = ref(data.value?.[2])
 
 const isLoading = ref(false)
+const isLive = ref(false)
+
 let ac: AbortController
 
 const { currentPage, pageCount, currentPageSize, isFirstPage, isLastPage, next, prev } =
   useOffsetPagination({
     page,
     pageSize: IMAGE_PAGE_SIZE,
-    total: stats?.images || 0,
+    total: stats?.value?.images || 0,
     onPageChange: async state => {
       if (ac) ac.abort()
       ac = new AbortController()
@@ -39,6 +41,7 @@ const { currentPage, pageCount, currentPageSize, isFirstPage, isLastPage, next, 
       const data = await dbGetImages(
         state.currentPage,
         state.currentPageSize,
+        isLive.value,
         ac.signal,
       )
 
@@ -51,6 +54,12 @@ const { currentPage, pageCount, currentPageSize, isFirstPage, isLastPage, next, 
       }
     },
   })
+
+const live = useIntervalFn(refresh, 5000)
+
+watch(isLive, isLive => {
+  isLive ? live.resume() : live.pause()
+})
 </script>
 
 <template>
@@ -70,19 +79,19 @@ const { currentPage, pageCount, currentPageSize, isFirstPage, isLastPage, next, 
     </div>
 
     <div class="flex w-full flex-col gap-4">
-      <div class="flex justify-between" v-if="false">
+      <div class="flex justify-between">
         <div class="flex w-5/12 gap-2">
           <Input placeholder="بحث..." />
-          <Toggle variant="outline" color="destructive">
+          <Toggle variant="outline" color="destructive" v-model:pressed="isLive">
             مباشر
             <Icon name="tabler:point-filled" class="ms-2 w-[16px]" />
           </Toggle>
         </div>
 
-        <Button variant="secondary">
+        <!-- <Button variant="secondary">
           رفع صور
           <Icon name="tabler:upload" class="ms-2 w-[16px]" />
-        </Button>
+        </Button> -->
       </div>
 
       <DataTable

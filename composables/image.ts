@@ -148,17 +148,21 @@ export async function useImages(page: number, perPage: number) {
 export function dbGetImages(
   page: number,
   pageSize: number,
+  ignoreNullWords: boolean = false,
   abortSignal: AbortSignal = new AbortController().signal,
 ) {
   const supabase = useSupabase()
 
-  return supabase
+  let query = supabase
     .from('images')
     .select()
     .range((page - 1) * pageSize, page * pageSize - 1)
     .order('word')
     .abortSignal(abortSignal)
-    .then(({ data }) => data)
+
+  if (ignoreNullWords) query = query.not('word', 'is', null)
+
+  return query.then(({ data }) => data)
 }
 
 export function getImageUrl(file_name: string) {
