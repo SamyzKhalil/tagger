@@ -15,7 +15,7 @@ const IMAGE_PAGE_SIZE = 100
 const route = useRoute('dashboard')
 const page = (route.query.page as unknown as number) || 1
 
-const { data, pending } = await useAsyncData('dashboard', () => {
+const { data } = await useAsyncData('dashboard', () => {
   return Promise.all([dbGetStats(), dbGetUsers(), dbGetImages(page, IMAGE_PAGE_SIZE)])
 })
 
