@@ -14,19 +14,19 @@ useHead({
 const IMAGE_PAGE_SIZE = 100
 
 const page = useRouteQuery('page', 1, { transform: Number })
-const filterWord = useRouteQuery('word', '')
-const filterWordDeb = refDebounced(filterWord, 1000)
+const search = useRouteQuery('word', '')
+const searchDeb = refDebounced(search, 1000)
 
-syncRef(filterWord, filterWordDeb)
+syncRef(search, searchDeb)
 
 const [stats, users, images] = await Promise.all([
   useAsyncData('stats', async () => await dbGetStats()),
   useAsyncData('users', async () => await dbGetUsers()),
   useAsyncData(
     `images:${page.value}`,
-    async () => await dbGetImages(page.value, IMAGE_PAGE_SIZE, filterWordDeb.value),
+    async () => await dbGetImages(page.value, IMAGE_PAGE_SIZE, searchDeb.value),
     {
-      watch: [page, filterWordDeb],
+      watch: [page, searchDeb],
     },
   ),
 ])
@@ -48,21 +48,6 @@ function refresh() {
   users.refresh()
   images.refresh()
 }
-
-const stream = useIntervalFn(refresh, 5000, {
-  immediate: false,
-})
-
-const isLive = ref(false)
-watch(
-  isLive,
-  live => {
-    live ? stream.resume() : stream.pause()
-  },
-  {
-    immediate: true,
-  },
-)
 </script>
 
 <template>
@@ -91,19 +76,15 @@ watch(
 
     <div class="flex w-full flex-col gap-4">
       <div class="flex justify-between">
-        <div class="flex w-5/12 gap-2">
-          <Input placeholder="بحث..." v-model:model-value="filterWordDeb" />
-          <!-- <Toggle variant="outline" color="destructive" v-model:pressed="isLive">
-            مباشر
-            <Icon name="tabler:point-filled" class="ms-2 w-[16px]" />
-          </Toggle> -->
-          <Button variant="outline" @click="refresh">تحديث</Button>
-        </div>
-
-        <!-- <Button variant="secondary">
-          رفع صور
-          <Icon name="tabler:upload" class="ms-2 w-[16px]" />
-        </Button> -->
+        <Input
+          class="w-1/3 [unicode-bidi:plaintext]"
+          placeholder="بحث اسم الملف والكلمة..."
+          v-model:model-value="searchDeb"
+        />
+        <Button variant="outline" @click="refresh">
+          تحديث
+          <Icon name="tabler:refresh" size="16" class="ms-1" />
+        </Button>
       </div>
 
       <DataTable

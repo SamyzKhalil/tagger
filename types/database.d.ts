@@ -149,7 +149,6 @@ export interface Database {
       images_random: {
         Row: {
           file_name: string | null
-          handle: string | null
           id: string | null
           is_locked: boolean | null
           word: string | null
@@ -175,7 +174,21 @@ export interface Database {
       }
     }
     Functions: {
-      [_ in never]: never
+      f_random_sample: {
+        Args: {
+          _tbl_type: unknown
+          _id?: string
+          _limit?: number
+          _gaps?: number
+        }
+        Returns: unknown[]
+      }
+      filename_word: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

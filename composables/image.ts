@@ -72,7 +72,7 @@ export function dbGetUniqueImage() {
     .then(({ data }) => data)
 }
 
-export function dbGetImages(page: number, pageSize: number, filterWord?: string) {
+export function dbGetImages(page: number, pageSize: number, search?: string) {
   const supabase = useSupabase()
 
   let query = supabase
@@ -81,7 +81,7 @@ export function dbGetImages(page: number, pageSize: number, filterWord?: string)
     .range((page - 1) * pageSize, page * pageSize - 1)
     .order('word')
 
-  if (filterWord) query = query.filter('word', 'like', filterWord)
+  if (search) query = query.textSearch('filename_word', search)
 
   return query.then(({ data, count }) => ({ data, count }))
 }
