@@ -14,7 +14,7 @@ useHead({
 
 <template>
   <SpeedInsights />
-  <NuxtLoadingIndicator color="hsl(var(--primary))" />
+  <!-- <NuxtLoadingIndicator color="hsl(var(--primary))" /> -->
 
   <ConfigProvider dir="rtl">
     <div class="relative h-screen">
