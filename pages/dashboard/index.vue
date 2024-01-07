@@ -60,7 +60,7 @@ const { handle } = useUser()
           <Icon name="tabler:arrow-right" size="16" class="me-1" />
           الرجوع إلى الوسم
         </Button>
-        <div dir="auto" class="font-bold text-muted-foreground">@{{ handle }}</div>
+        <div dir="auto" class="font-bold text-muted-foreground">{{ handle }}</div>
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
@@ -130,4 +130,6 @@ const { handle } = useUser()
       </div>
     </div>
   </div>
+
+  <WordDialog />
 </template>
