@@ -9,7 +9,7 @@ useHead({
 })
 
 dbAutoLockImage(params.id, 50 * 1000)
-const { word } = await dbAutoSaveTag(params.id)
+const { word, pending } = await dbAutoSaveTag(params.id)
 
 const isLoading = ref(false)
 
@@ -40,7 +40,19 @@ const imageUrl = getImageUrl(params.name)
       </CardContent>
 
       <CardFooter>
-        <Input class="h-16 text-2xl" placeholder="الكلمة" v-lock-focus v-model="word" />
+        <div class="relative">
+          <Input
+            class="h-16 text-2xl"
+            placeholder="لا توجد كلمة"
+            v-lock-focus
+            v-model="word"
+          />
+
+          <div class="absolute inset-y-0 left-4 flex items-center">
+            <Icon name="tabler:refresh" class="animate-spin" v-if="pending" />
+            <Icon name="tabler:circle-check-filled" v-else />
+          </div>
+        </div>
       </CardFooter>
 
       <div

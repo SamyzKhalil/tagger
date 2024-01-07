@@ -2,6 +2,7 @@ export async function dbAutoSaveTag(imageId: string) {
   const supabase = useSupabase()
 
   const word = ref()
+  const pending = ref(false)
 
   const { data } = await supabase
     .from('tags')
@@ -13,15 +14,20 @@ export async function dbAutoSaveTag(imageId: string) {
     word.value = data.word
   }
 
+  watch(word, () => {
+    pending.value = true
+  })
+
   watchDebounced(
     word,
     async word => {
       await dbSaveTag(imageId, word)
+      pending.value = false
     },
     { debounce: 1000 },
   )
 
-  return { word }
+  return { word, pending }
 }
 
 export async function dbSaveTag(imageId: string, word: string) {
