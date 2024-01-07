@@ -9,9 +9,11 @@ export const contributorsTableColumns: ColumnDef<Contributions>[] = [
   {
     accessorKey: 'handle',
     header: 'المُعرّف',
+    size: 50,
   },
   {
     accessorKey: 'contributions',
     header: 'المساهمات',
+    size: 50,
   },
 ]

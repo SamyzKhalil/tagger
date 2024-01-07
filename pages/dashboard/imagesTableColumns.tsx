@@ -15,10 +15,9 @@ import {
 } from '#components'
 
 import { dbSaveTag } from '#imports'
-import { DialogRoot } from 'radix-vue'
 
 export interface Image {
-  id: string
+  id: string | null
   file_name: string | null
   word: string | null
   handle: string | null
@@ -29,6 +28,7 @@ export const imagesTableColumns: ColumnDef<Image>[] = [
   {
     accessorKey: 'file_name',
     header: 'الصورة',
+    size: 20,
     cell({ row }) {
       const url = row.original.file_name ? getImageUrl(row.original.file_name) : ''
 
@@ -38,6 +38,7 @@ export const imagesTableColumns: ColumnDef<Image>[] = [
   {
     accessorKey: 'file_name',
     header: 'اسم الملف',
+    size: 25,
     cell({ row }) {
       return <span dir="auto">{row.original.file_name}</span>
     },
@@ -45,65 +46,60 @@ export const imagesTableColumns: ColumnDef<Image>[] = [
   {
     accessorKey: 'word',
     header: 'الكلمة',
+    size: 25,
   },
   {
     accessorKey: 'handle',
     header: 'المساهم',
+    size: 20,
     cell({ row }) {
       return row.original.handle && <span dir="auto">@{row.original.handle}</span>
     },
   },
   {
     id: 'action',
+    size: 10,
     cell({ row }) {
-      let word = row.original.word || ''
-
-      async function save() {
-        await dbSaveTag(row.original.id, word)
-      }
-
-      return (
-        <Dialog>
-          {/* <DialogTrigger as-child>
-            <Button variant="ghost">تعديل كلمة</Button>
-          </DialogTrigger> */}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Icon name="tabler:dots-vertical" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DialogTrigger asChild>
-                <DropdownMenuItem>
-                  <Icon name="tabler:pencil" size="16" class="me-1" />
-                  تعديل الكلمة
-                </DropdownMenuItem>
-              </DialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <DialogContent>
-            <DialogHeader class="mb-2">
-              <DialogTitle>تعديل الكلمة</DialogTitle>
-            </DialogHeader>
-
-            <div class="flex gap-4">
-              <Input
-                /* @ts-ignore */
-                id="word"
-                class=""
-                modelValue={word}
-                onUpdate:modelValue={value => (word = value as string)}
-                placeholder="لا توجد كلمة"
-              />
-              {/* @ts-ignore */}
-              <Button type="submit" onClick={save}>
-                حفظ
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )
+      return <WordDialog id={row.original.id!} _word={row.original.word || ''} />
     },
   },
 ]
+
+function WordDialog(props: { id: string; _word: string }) {
+  let word = props._word
+
+  async function save() {
+    await dbSaveTag(props.id, word)
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger as-child>
+        <Button variant="ghost">
+          <Icon name="tabler:pencil" size="16" class="me-1" />
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent>
+        <DialogHeader class="mb-2">
+          <DialogTitle>تعديل الكلمة</DialogTitle>
+        </DialogHeader>
+
+        <div class="flex gap-4">
+          <Input
+            /* @ts-ignore */
+            id="word"
+            class=""
+            modelValue={word}
+            onUpdate:modelValue={value => (word = value as string)}
+            placeholder="لا توجد كلمة"
+          />
+          {/* @ts-ignore */}
+          <Button type="submit" onClick={save}>
+            حفظ
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}

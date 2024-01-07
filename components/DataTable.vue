@@ -35,7 +35,16 @@ const table = useVueTable({
         class="sticky top-0 bg-card after:absolute after:w-full after:border-b after:border-b-border"
       >
         <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-          <TableHead v-for="header in headerGroup.headers" :key="header.id">
+          <TableHead
+            v-for="header in headerGroup.headers"
+            :key="header.id"
+            :style="{
+              width:
+                header.getSize() === Number.MAX_SAFE_INTEGER
+                  ? 'auto'
+                  : header.getSize() + '%',
+            }"
+          >
             <FlexRender
               v-if="!header.isPlaceholder"
               :render="header.column.columnDef.header"
@@ -51,7 +60,16 @@ const table = useVueTable({
             :key="row.id"
             :data-state="row.getIsSelected() ? 'selected' : undefined"
           >
-            <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+            <TableCell
+              v-for="cell in row.getVisibleCells()"
+              :key="cell.id"
+              :style="{
+                width:
+                  cell.column.getSize() === Number.MAX_SAFE_INTEGER
+                    ? 'auto'
+                    : cell.column.getSize() + '%',
+              }"
+            >
               <FlexRender
                 :render="cell.column.columnDef.cell"
                 :props="cell.getContext()"
