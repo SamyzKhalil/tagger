@@ -56,10 +56,12 @@ const { handle } = useUser()
   <div class="flex h-screen w-screen gap-4 p-4">
     <div class="flex w-2/5 min-w-[300px] flex-col space-y-4">
       <div class="flex items-center justify-between">
-        <Button variant="outline" @click="navigateTo('/tag')">
-          <Icon name="tabler:arrow-right" size="16" class="me-1" />
-          الرجوع إلى الوسم
-        </Button>
+        <NuxtLink to="/tag">
+          <Button variant="outline">
+            <Icon name="tabler:arrow-right" size="16" class="me-1" />
+            الرجوع إلى الوسم
+          </Button>
+        </NuxtLink>
         <div dir="auto" class="font-bold text-muted-foreground">{{ handle }}</div>
       </div>
 
