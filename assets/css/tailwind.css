@@ -97,7 +97,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Noto Kufi Arabic Variable';
+    font-family: 'Noto Kufi Arabic Variable', sans-serif;
   }
 
   .appearance-textfield {
