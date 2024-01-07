@@ -9,7 +9,7 @@
   },
   "framework": "nuxt",
   "aliases": {
-    "components": "@/components/ui",
-    "utils": "@/components/ui"
+    "components": "@/components",
+    "utils": "@/components/ui/utils"
   }
 }

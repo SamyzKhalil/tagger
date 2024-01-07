@@ -183,12 +183,6 @@ export interface Database {
         }
         Returns: unknown[]
       }
-      filename_word: {
-        Args: {
-          "": unknown
-        }
-        Returns: string
-      }
     }
     Enums: {
       [_ in never]: never

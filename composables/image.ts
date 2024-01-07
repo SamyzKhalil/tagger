@@ -26,39 +26,6 @@ export function dbAutoLockImage(id: string, interval: number) {
   })
 }
 
-export async function dbAutoSaveLabel(imageId: string) {
-  const supabase = useSupabase()
-
-  const word = ref()
-
-  const { data } = await supabase
-    .from('tags')
-    .select('word')
-    .eq('image_id', imageId)
-    .single()
-
-  if (data) {
-    word.value = data.word
-  }
-
-  watchDebounced(
-    word,
-    async word => {
-      if (!word.trim()) {
-        await supabase.from('tags').delete().eq('image_id', imageId)
-        return
-      }
-
-      await supabase
-        .from('tags')
-        .upsert({ image_id: imageId, word }, { onConflict: 'image_id' })
-    },
-    { debounce: 1000 },
-  )
-
-  return { word }
-}
-
 export function dbGetUniqueImage() {
   const supabase = useSupabase()
 
@@ -79,7 +46,6 @@ export function dbGetImages(page: number, pageSize: number, search?: string) {
     .from('images')
     .select('*', { count: 'planned' })
     .range((page - 1) * pageSize, page * pageSize - 1)
-    .order('word')
 
   if (search) query = query.textSearch('filename_word', search)
 

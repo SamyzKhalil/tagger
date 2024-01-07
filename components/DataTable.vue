@@ -4,14 +4,11 @@ import {
   getCoreRowModel,
   useVueTable,
   type ColumnDef,
-  type PaginationState,
-  type TableOptions,
 } from '@tanstack/vue-table'
 
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[]
   data?: TData[] | null
-  pageCount?: number
   loading?: boolean
 }>()
 

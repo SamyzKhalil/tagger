@@ -9,7 +9,7 @@ useHead({
 })
 
 dbAutoLockImage(params.id, 50 * 1000)
-const { word } = await dbAutoSaveLabel(params.id)
+const { word } = await dbAutoSaveTag(params.id)
 
 const isLoading = ref(false)
 
