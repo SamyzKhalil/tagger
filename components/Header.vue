@@ -20,6 +20,6 @@ function signOut() {
         <NuxtLink to="/dashboard">لوحة التحكم</NuxtLink>
       </Button>
     </div>
-    <Button @click="signOut()" variant="link">تسجيل خروج</Button>
+    <Button @click="signOut()" variant="ghost">تسجيل الخروج</Button>
   </div>
 </template>

@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   Icon,
+  WordDialog,
 } from '#components'
 
 import { dbSaveTag } from '#imports'
@@ -60,46 +61,22 @@ export const imagesTableColumns: ColumnDef<Image>[] = [
     id: 'action',
     size: 10,
     cell({ row }) {
-      return <WordDialog id={row.original.id!} _word={row.original.word || ''} />
+      const { open, props } = useWordDialog()
+
+      return (
+        <button
+          onClick={() => {
+            open.value = true
+
+            props.value = {
+              id: row.original.id!,
+              word: row.original.word!,
+            }
+          }}
+        >
+          <Icon name="tabler:pencil" size="16" class="me-1" />
+        </button>
+      )
     },
   },
 ]
-
-function WordDialog(props: { id: string; _word: string }) {
-  let word = props._word
-
-  async function save() {
-    await dbSaveTag(props.id, word)
-  }
-
-  return (
-    <Dialog>
-      <DialogTrigger as-child>
-        <Button variant="ghost">
-          <Icon name="tabler:pencil" size="16" class="me-1" />
-        </Button>
-      </DialogTrigger>
-
-      <DialogContent>
-        <DialogHeader class="mb-2">
-          <DialogTitle>تعديل الكلمة</DialogTitle>
-        </DialogHeader>
-
-        <div class="flex gap-4">
-          <Input
-            /* @ts-ignore */
-            id="word"
-            class=""
-            modelValue={word}
-            onUpdate:modelValue={value => (word = value as string)}
-            placeholder="لا توجد كلمة"
-          />
-          {/* @ts-ignore */}
-          <Button type="submit" onClick={save}>
-            حفظ
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
-}
