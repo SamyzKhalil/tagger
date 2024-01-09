@@ -23,7 +23,7 @@ const [stats, users, images] = await Promise.all([
   useAsyncData('stats', async () => await dbGetStats()),
   useAsyncData('users', async () => await dbGetUsers()),
   useAsyncData(
-    `images:${page.value}`,
+    `images`,
     async () => await dbGetImages(page.value, IMAGE_PAGE_SIZE, searchDeb.value),
     {
       watch: [page, searchDeb],

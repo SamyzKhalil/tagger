@@ -34,11 +34,13 @@ export async function dbSaveTag(imageId: string, word: string) {
   const supabase = useSupabase()
 
   if (!word.trim()) {
-    await supabase.from('tags').delete().eq('image_id', imageId)
-    return
+    const { status } = await supabase.from('tags').delete().eq('image_id', imageId)
+    return { status }
   }
 
-  await supabase
+  const { status } = await supabase
     .from('tags')
     .upsert({ image_id: imageId, word }, { onConflict: 'image_id' })
+
+  return { status }
 }

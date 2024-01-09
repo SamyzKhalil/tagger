@@ -4,8 +4,12 @@ import { onKeyPressed } from '@vueuse/core'
 const { open, props } = useWordDialog()
 
 async function save() {
-  await dbSaveTag(props.value?.id, props.value?.word)
+  const { status } = await dbSaveTag(props.value?.id, props.value?.word)
   open.value = false
+
+  if (status === 200) {
+    refreshNuxtData('images')
+  }
 }
 
 onKeyPressed('Enter', () => {
