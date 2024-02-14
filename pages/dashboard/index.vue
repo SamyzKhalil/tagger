@@ -49,6 +49,17 @@ function refresh() {
   images.refresh()
 }
 
+async function exportData() {
+  const { data, error } = await dbExportData()
+
+  if (error) return
+
+  const file = new Blob([data], { type: 'text/csv' })
+  const fileUrl = URL.createObjectURL(file)
+
+  window.open(fileUrl)
+}
+
 const { handle } = useUser()
 </script>
 
@@ -93,10 +104,16 @@ const { handle } = useUser()
           placeholder="بحث اسم الملف والكلمة..."
           v-model:model-value="searchDeb"
         />
-        <Button variant="outline" @click="refresh">
-          تحديث
-          <Icon name="tabler:refresh" size="16" class="ms-1" />
-        </Button>
+        <div class="flex gap-2">
+          <Button variant="outline" @click="refresh">
+            تحديث
+            <Icon name="tabler:refresh" size="16" class="ms-1" />
+          </Button>
+          <Button variant="secondary" @click="exportData">
+            تصدير
+            <Icon name="tabler:download" size="16" class="ms-1" />
+          </Button>
+        </div>
       </div>
 
       <DataTable
