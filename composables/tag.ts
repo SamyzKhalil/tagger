@@ -48,5 +48,9 @@ export async function dbSaveTag(imageId: string, word: string) {
 export function dbExportData() {
   const supabase = useSupabase()
 
-  return supabase.from('tags').select('...images(file_name), word').csv()
+  return supabase
+    .from('tags')
+    .select('...images(file_name), word')
+    .neq('word', '-')
+    .csv()
 }
